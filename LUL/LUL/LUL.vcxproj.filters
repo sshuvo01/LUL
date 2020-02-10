@@ -52,6 +52,7 @@
   <ItemGroup>
     <None Include="res\shaders\MyShader.shader" />
     <None Include="res\shaders\anewshader.shader" />
+    <None Include="res\shaders\Light.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">

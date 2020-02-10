@@ -17,8 +17,8 @@
 #include "SomeTransform.h"
 #include "Camera.h"
 
-const int SCR_WIDTH = 640;
-const int SCR_HEIGHT = 480;
+const int SCR_WIDTH = 640*2;
+const int SCR_HEIGHT = 480*2;
 Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
 // timing
 float deltaTime = 0.0f;	// time between current frame and last frame
@@ -151,94 +151,89 @@ int main(void)
 	}
 
 	float vertices[] = {
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,
 
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f,  0.0f, 1.0f,
 
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,
 
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,
 
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,
+	-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,
 
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-	 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-	-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-	-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,
+	-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f
 };
 
-
-	/*
-	glm::mat4 proj = glm::ortho(-1.0f, 3.0f, -1.5f, 1.5f, -1.0f, 1.0f);
-	//ShowMatrix(proj);
-	glm::vec4 lala = proj * glm::vec4(-0.5f, -0.5f, 0.0f, 1.0f);
-	ShowVector(lala);
-	*/
-	glm::mat4 model(1.0f), view(1.0f), projection(1.0f);
-	Transform::Rotate(model, -45, glm::vec3(1.0f, 0.0f, 0.0f));
-	Transform::Translate(view, glm::vec3(0.0f, 0.0f, -3.0f));
-	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
-
-	Shader twist("res/shaders/anewshader.shader");
-
-	Shader amarShader("res/shaders/MyShader.shader");
-	Texture amarTexture1("res/textures/awesomeface.png");
-	Texture amarTexture2("res/textures/container.jpg");
-
-	amarShader.SetUniform1i("u_Texture1", 0);
-	amarShader.SetUniform1i("u_Texture2", 1);
+	Shader lightShader("res/shaders/Light.shader");
+	Shader objectShader("res/shaders/anewshader.shader");
+	VertexBuffer vb(vertices, sizeof(float)* 36 * 6);
 	
-	amarTexture1.Bind(0);
-	amarTexture2.Bind(1);
-
-	VertexArray va;
-	VertexBuffer vb(vertices, sizeof(float) * 36 * 5);
 	VertexBufferLayout vbl;
 	vbl.Push<float>(3);
-	vbl.Push<float>(2); // tex coords
+	vbl.Push<float>(3);
+	
+	VertexArray vao;
+	IndexBuffer ib = IndexBuffer(indices, 36);
+	vao.AddBuffer(vb, vbl);
+	Renderer mainRenderer = Renderer();
 
-	va.AddBuffer(vb, vbl);
-	IndexBuffer ib(indices, 36);
-	Renderer myRenderer;
-	amarShader.Bind();
+	vao.Bind();
+	
+	glm::mat4 model(1.0f), view(1.0f), projection(1.0f);
+	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+	lightShader.SetUniformMatrix4f("u_Projection", projection);
 
-	amarShader.SetUniformMatrix4f("u_Model", model);
-	amarShader.SetUniformMatrix4f("u_View", view);
-	amarShader.SetUniformMatrix4f("u_Projection", projection);
+	/*light source settings*/
+	glm::vec3 lightPosition = glm::vec3(1.0f, -1.0f, -3.0f);
+	glm::vec3 lightColor = glm::vec3(1.0f);
+	Transform::Translate(model, lightPosition);
+	/*object settings*/
+	glm::mat4 objectModel(1.0f);
+	//Transform::Translate(objectModel, glm::vec3(10.0f, 10.0f, 10.0f));
+	glm::vec3 objectColor = glm::vec3(0.6f, 0.01f, 0.01f);
+	
+	objectShader.SetUniformMatrix4f("u_Model", objectModel);
+	objectShader.SetUniformMatrix4f("u_Projection", projection);
+	objectShader.SetUniform3f("u_LightColor", lightColor);
+	objectShader.SetUniform3f("u_LightPosition", lightPosition);
+	objectShader.SetUniform3f("u_ObjectColor", objectColor);
 
-	myRenderer.InitSettings();
-	float rotationMult = 15.0f;
-	//Camera camera(glm::vec3(0.0f, 0.0f, 3.0f));
-	/* Loop until the user closes the window */
+	/*initialize the renderer*/
+	mainRenderer.InitSettings();
+	/*render loop*/
 	while (!glfwWindowShouldClose(window))
 	{	
+		////////////////////////
 		float currentFrame = glfwGetTime();
 		deltaTime = currentFrame - lastFrame;
 		lastFrame = currentFrame;
@@ -246,16 +241,25 @@ int main(void)
 		// input
 		// -----
 		processInput(window);
-
-		float elapsedTime = (float)glfwGetTime();
-		model = glm::mat4(1.0f);
-		Transform::Rotate(model, elapsedTime*rotationMult, glm::vec3(1.0f, 0.0f, 0.0f));
-		amarShader.SetUniformMatrix4f("u_Model", model);
-		amarShader.SetUniformMatrix4f("u_View", camera.GetViewMatrix());
-
-		myRenderer.Clear();
-		myRenderer.Draw(va, ib, amarShader);
+		////////////////////////
+		model = glm::mat4(1.0f); 
+		Transform::Translate(model, lightPosition);
 		
+		lightShader.SetUniformMatrix4f("u_Model", model);
+		lightShader.SetUniformMatrix4f("u_View", camera.GetViewMatrix());
+		
+		objectShader.SetUniformMatrix4f("u_View", camera.GetViewMatrix());
+		
+		//////////
+		/*draw the light source*/
+		mainRenderer.Clear();
+		mainRenderer.Draw(vao, ib, lightShader);
+		/*draw the object*/
+		
+		objectModel = glm::mat4(1.0f);
+		Transform::Rotate(objectModel, currentFrame * 20.0f, glm::vec3(1.0f, 0.0f, 0.0f));
+		objectShader.SetUniformMatrix4f("u_Model", objectModel);
+		mainRenderer.Draw(vao, ib, objectShader);
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
 

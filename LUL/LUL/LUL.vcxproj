@@ -149,6 +149,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\anewshader.shader" />
+    <None Include="res\shaders\Light.shader" />
     <None Include="res\shaders\MyShader.shader" />
   </ItemGroup>
   <ItemGroup>

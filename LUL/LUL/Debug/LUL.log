@@ -7,5 +7,5 @@ e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(82): warning C42
 e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(83): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
 e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(90): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
 e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(141): warning C4305: 'initializing': truncation from 'double' to 'float'
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(242): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(237): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
   LUL.vcxproj -> E:\Programming\OpenGL\Cherno\OpenGL\LUL\Debug\LUL.exe

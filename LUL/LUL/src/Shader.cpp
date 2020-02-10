@@ -30,6 +30,7 @@ void Shader::Unbind() const
 
 void Shader::SetUniform1i(const std::string & name, int value)
 {
+	Bind();
 	int loc = GetUniformLocation(name);
 	if (loc == -1) return;
 
@@ -38,6 +39,7 @@ void Shader::SetUniform1i(const std::string & name, int value)
 
 void Shader::SetUniform1f(const std::string & name, float value)
 {
+	Bind();
 	int loc = GetUniformLocation(name);
 	if (loc == -1) return;
 
@@ -46,6 +48,7 @@ void Shader::SetUniform1f(const std::string & name, float value)
 
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3)
 {
+	Bind();
 	int loc = GetUniformLocation(name);
 	if (loc == -1) return;
 
@@ -54,14 +57,25 @@ void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2,
 
 void Shader::SetUniform4f(const std::string & name, const glm::vec4 & vec)
 {
+	Bind();
 	int loc = GetUniformLocation(name);
 	if (loc == -1) return;
 
 	GLCALL(glUniform4f(loc, vec[0], vec[1], vec[2], vec[3]));
 }
 
+void Shader::SetUniform3f(const std::string & name, const glm::vec3 & vec)
+{
+	Bind();
+	int loc = GetUniformLocation(name);
+	if (loc == -1) return;
+
+	GLCALL(glUniform3f(loc, vec[0], vec[1], vec[2]));
+}
+
 void Shader::SetUniformMatrix4f(const std::string & name, const glm::mat4 & matrix)
 {
+	Bind();
 	int loc = GetUniformLocation(name);
 	if (loc == -1) return;
 
@@ -120,7 +134,7 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 
 		GLCALL(glGetShaderInfoLog(id, length, &length, message));
 
-		std::cout << "Failed to compile ";// << (type == GL_VERTEX_SHADER ? "vertex" : "fragment");
+		std::cout << "Failed to compile " << (type == GL_VERTEX_SHADER ? "VERTEX " : "FRAGMENT ");
 		std::cout << message << std::endl;
 		GLCALL(glDeleteShader(id));
 		return 0;
