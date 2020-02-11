@@ -213,8 +213,12 @@ int main(void)
 	projection = glm::perspective(glm::radians(45.0f), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 	lightShader.SetUniformMatrix4f("u_Projection", projection);
 
+	objectShader.SetUniform3f("u_Light.ambient", glm::vec3(0.2f, 0.2f, 0.2f));
+	objectShader.SetUniform3f("u_Light.diffuse", glm::vec3(0.5f, 0.5f, 0.5f));
+	objectShader.SetUniform3f("u_Light.specular", glm::vec3(1.0f, 1.0f, 1.0f));
+
 	/*light source settings*/
-	glm::vec3 lightPosition = glm::vec3(1.0f, -1.0f, -3.0f);
+	glm::vec3 lightPosition = glm::vec3(2.0f, 2.0f, -4.0f);
 	glm::vec3 lightColor = glm::vec3(1.0f);
 	Transform::Translate(model, lightPosition);
 	/*object settings*/
@@ -227,6 +231,11 @@ int main(void)
 	objectShader.SetUniform3f("u_LightColor", lightColor);
 	objectShader.SetUniform3f("u_LightPosition", lightPosition);
 	objectShader.SetUniform3f("u_ObjectColor", objectColor);
+
+	objectShader.SetUniform3f("u_Material.ambient", glm::vec3(1.0f, 0.5f, 0.31f));
+	objectShader.SetUniform3f("u_Material.diffuse", glm::vec3(1.0f, 0.5f, 0.31f));
+	objectShader.SetUniform3f("u_Material.specular", glm::vec3(0.5f, 0.5f, 0.5f));
+	objectShader.SetUniform1f("u_Material.shininess", 32.0f);
 
 	/*initialize the renderer*/
 	mainRenderer.InitSettings();
@@ -259,6 +268,7 @@ int main(void)
 		objectModel = glm::mat4(1.0f);
 		Transform::Rotate(objectModel, currentFrame * 20.0f, glm::vec3(1.0f, 0.0f, 0.0f));
 		objectShader.SetUniformMatrix4f("u_Model", objectModel);
+		objectShader.SetUniform3f("u_CameraPosition", camera.Position);
 		mainRenderer.Draw(vao, ib, objectShader);
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);
