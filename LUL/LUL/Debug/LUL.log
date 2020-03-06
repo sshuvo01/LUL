@@ -1,11 +1,31 @@
 ﻿  Application.cpp
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(74): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(75): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(79): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(80): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(82): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(83): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(90): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(141): warning C4305: 'initializing': truncation from 'double' to 'float'
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(246): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(91): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(92): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(96): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(99): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(100): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(107): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(208): warning C4305: 'initializing': truncation from 'double' to 'float'
+e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(308): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Camera.cpp
+  IndexBuffer.cpp
+  Light.cpp
+  Mesh.cpp
+  Model.cpp
+  PointLight.cpp
+  Renderer.cpp
+e:\programming\opengl\cherno\opengl\lul\lul\src\renderer.cpp(40): warning C4305: 'argument': truncation from 'double' to 'GLclampf'
+  Shader.cpp
+  SomeTransform.cpp
+  Texture.cpp
+  VertexArray.cpp
+e:\programming\opengl\cherno\opengl\lul\lul\src\vertexarray.cpp(21): warning C4018: '<': signed/unsigned mismatch
+  VertexBuffer.cpp
+  VertexBufferLayout.cpp
+  stb_image.cpp
+  Generating Code...
+LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
+LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
+glew32s.lib(glew.obj) : warning LNK4099: PDB 'vc120.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'E:\Programming\OpenGL\Cherno\OpenGL\LUL\Debug\vc120.pdb'; linking object as if no debug info
   LUL.vcxproj -> E:\Programming\OpenGL\Cherno\OpenGL\LUL\Debug\LUL.exe

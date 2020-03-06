@@ -48,11 +48,24 @@
     <ClCompile Include="src\Camera.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Mesh.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Model.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Light.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PointLight.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\MyShader.shader" />
     <None Include="res\shaders\anewshader.shader" />
     <None Include="res\shaders\Light.shader" />
+    <None Include="res\shaders\modelLoading.shader" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -85,12 +98,30 @@
     <ClInclude Include="src\Camera.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Mesh.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Model.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Light.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\PointLight.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\awesomeface.png">
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\container.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\container2_specular.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\container2.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>
