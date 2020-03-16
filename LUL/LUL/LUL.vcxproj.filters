@@ -66,6 +66,11 @@
     <None Include="res\shaders\anewshader.shader" />
     <None Include="res\shaders\Light.shader" />
     <None Include="res\shaders\modelLoading.shader" />
+    <None Include="res\shaders\Floor.shader" />
+    <None Include="res\shaders\Box.shader" />
+    <None Include="res\shaders\asd.vert" />
+    <None Include="res\shaders\Outliner.vert" />
+    <None Include="res\shaders\test.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -122,6 +127,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\container2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\marble.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\metal.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

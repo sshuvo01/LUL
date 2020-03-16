@@ -139,7 +139,7 @@ static int CreateWindow(GLFWwindow*& window, int width, int height, const std::s
 
 	// tell GLFW to capture our mouse
 	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
+	
 
 	return 0;
 }
@@ -262,45 +262,102 @@ int main(void)
 	   -0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f, 1.0f
 };
 
+	float planeVertices[] = {
+		// positions          
+							/* texture Coords 
+							(note we set these higher than 1 
+							(together with GL_REPEAT as texture wrapping mode). 
+							this will cause the floor texture to repeat) */
+		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
+		-5.0f, -0.5f,  5.0f,  0.0f, 0.0f,
+		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
 
-	//GLCALL(glBindVertexArray(1));
+		 5.0f, -0.5f,  5.0f,  2.0f, 0.0f,
+		-5.0f, -0.5f, -5.0f,  0.0f, 2.0f,
+		 5.0f, -0.5f, -5.0f,  2.0f, 2.0f
+	};
+	
+	unsigned int planeIndices[6] = {
+		0, 1, 2, 3, 4, 5
+	};
 
-	Renderer mainRenderer;
-	Shader modelShader("res/shaders/modelLoading.shader");
-	Model nanosuitModel("res/model/nanosuit/nanosuit.obj");
-	glm::vec3 modelPosition = glm::vec3(0.0f, -1.75f, 0.0f);
-	/////////////
-	Shader boxShader("res/shaders/anewshader.shader");
-	Shader lightShader("res/shaders/Light.shader");
-	VertexArray boxVao;
-	VertexBuffer boxVb = VertexBuffer(vertices, sizeof(float) * 8 * 36);
+	float cubeVertices[] = {
+		// positions          // texture Coords
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+	};
+
+	
+	Renderer mainRenderer = Renderer();
+	
+	/*box data*/
+	Shader boxShader("res/shaders/Box.shader");
+	Shader outlineShader("res/shaders/Outliner.vert");
+	Texture boxTexture("res/textures/marble.jpg");
+
+	VertexArray boxVao = VertexArray();
+	VertexBuffer boxVb = VertexBuffer(cubeVertices, sizeof(float) * 5 * 36);
 	IndexBuffer boxIb = IndexBuffer(indices, 36);
+
 	VertexBufferLayout boxVbl;
-	boxVbl.Push<float>(3);
 	boxVbl.Push<float>(3);
 	boxVbl.Push<float>(2);
 	boxVao.AddBuffer(boxVb, boxVbl);
 
-	Texture boxDiffuse = Texture("res/textures/container2.png");
-	Texture boxSpecular = Texture("res/textures/container2_specular.png");
-
+	/* floor data */
+	Shader floorShader("res/shaders/Floor.shader");
+	Texture floorTexture("res/textures/metal.png");
 	
-	boxShader.SetUniform3f("u_Light.ambient", glm::vec3(0.3f));
-	boxShader.SetUniform3f("u_Light.diffuse", glm::vec3(0.7f));
-	boxShader.SetUniform3f("u_Light.specular", glm::vec3(1.0f));
+	VertexArray floorVao = VertexArray();
+	VertexBuffer floorVb = VertexBuffer(planeVertices, sizeof(float) * 6 * 5);
+	IndexBuffer floorIb = IndexBuffer(planeIndices, 6);
 
-	boxShader.SetUniform1f("u_Material.shininess", 32.0f);
-	/////////////////////////////////
-	modelShader.SetUniform3f("u_Light.ambient", glm::vec3(0.3f));
-	modelShader.SetUniform3f("u_Light.diffuse", glm::vec3(0.7f));
-	modelShader.SetUniform3f("u_Light.specular", glm::vec3(1.0f));
+	VertexBufferLayout floorVbl;
+	floorVbl.Push<float>(3);
+	floorVbl.Push<float>(2);
+	floorVao.AddBuffer(floorVb, floorVbl);
+	
+	GLCALL(glEnable(GL_STENCIL_TEST));
 
-	glm::vec3 lightPos = glm::vec3(5.0f, 3.0f, 0.0f);
-	modelShader.SetUniform3f("u_Light.position", lightPos);
-
-	boxShader.SetUniform3f("u_LightPosition", lightPos);
-
-	mainRenderer.InitSettings();
 	/*render loop*/
 	while (!glfwWindowShouldClose(window))
 	{	
@@ -315,74 +372,68 @@ int main(void)
 		////////////////////////
 		mainRenderer.Clear();
 
-
 		// view/projection transformations
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), 
 			(float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
-		
-		modelShader.SetUniformMatrix4f("u_Projection", projection);
-		modelShader.SetUniformMatrix4f("u_View", view);
-
-		//ourShader.setMat4("projection", projection);
-		//ourShader.setMat4("view", view);
-
-		// render the loaded model
 		glm::mat4 model = glm::mat4(1.0f);
-		model = glm::translate(model, modelPosition); // translate it down so it's at the center of the scene
-		model = glm::rotate(model, (float) glm::radians(currentFrame * 15.0), 
-			glm::vec3(0.0f, 1.0f, 0.0f));		
-		model = glm::scale(model, glm::vec3(0.2f, 0.2f, 0.2f));	// it's a bit too big for our scene, so scale it down
-		modelShader.SetUniformMatrix4f("u_Model", model);
 
-		modelShader.SetUniform3f("u_CameraPosition", camera.Position);
-		/*render*/
-		nanosuitModel.Draw(modelShader, mainRenderer);
-		/*render the BOX*/
-		boxVao.Bind();
-		boxDiffuse.Bind(0);
-		boxSpecular.Bind(1);
+		/*render the floor*/
+		GLCALL(glStencilMask(0x00));
+		floorShader.SetUniformMatrix4f("u_Model", glm::mat4(1.0f));
+		floorShader.SetUniformMatrix4f("u_View", camera.GetViewMatrix());
+		floorShader.SetUniformMatrix4f("u_Projection", projection);
 
-		boxShader.SetUniform1i("u_Material.diffuse", 0);
-		boxShader.SetUniform1i("u_Material.specular", 1);
+		floorShader.SetUniform1i("u_FloorTexture", 0);
+		floorTexture.Bind(0);
+		mainRenderer.Draw(floorVao, floorIb, floorShader);
 
-		float sign = 1.0f;
-		float distance = 0.6f;
+		/*render the boxes, first pass*/
+		GLCALL(glStencilFunc(GL_ALWAYS, 1, 0xFF));
+		GLCALL(glStencilMask(0xFF));
+		GLCALL(glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE));
 
-		for (int i = 0; i < 5; i++)
-		{
-			sign = sign * -1.0f; // alternate 1, -1
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+		
+		boxShader.SetUniformMatrix4f("u_Model", model);
+		boxShader.SetUniformMatrix4f("u_View", view);
+		boxShader.SetUniformMatrix4f("u_Projection", projection);
 
-			model = glm::mat4(1.0f);
-			model = glm::rotate(model, (float)glm::radians(currentFrame * 120.0),
-				glm::vec3(0.0f, sign * 1.0f, 0.0f));
-			//model = glm::translate(model, glm::vec3(1.0f, 1.5f, 0.0f));
-			//model = glm::translate(model, modelPosition); 
-			//model = glm::rotate(model, (float)glm::radians(currentFrame * 15.0), glm::vec3(0.0f, 1.0f, 0.0f));
+		boxShader.SetUniform1i("u_BoxTexture", 0);
+		boxTexture.Bind(0);
+		mainRenderer.Draw(boxVao, boxIb, boxShader);
 
-			model = glm::translate(model, glm::vec3(1.0f, -1.5f + (distance * i), 0.0f));
-			model = glm::rotate(model, (float)glm::radians(currentFrame * 180.0),
-				glm::vec3(sign*1.0f, 0.0f, 0.0f));
-			model = glm::scale(model, glm::vec3(0.3f));
-
-			boxShader.SetUniformMatrix4f("u_Model", model);
-			boxShader.SetUniformMatrix4f("u_View", camera.GetViewMatrix());
-			boxShader.SetUniformMatrix4f("u_Projection", projection);
-			boxShader.SetUniform3f("u_CameraPosition", camera.Position);
-
-			mainRenderer.Draw(boxVao, boxIb, boxShader);
-		}
-
-		/*render the Light, all white*/
-		lightShader.SetUniformMatrix4f("u_Projection", projection);
-		lightShader.SetUniformMatrix4f("u_View", camera.GetViewMatrix());
-
+		// another box
 		model = glm::mat4(1.0f);
-		model = glm::translate(model, lightPos);
-		model = glm::scale(model, glm::vec3(0.5f));
-		lightShader.SetUniformMatrix4f("u_Model", model);
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		boxShader.SetUniformMatrix4f("u_Model", model);
+		mainRenderer.Draw(boxVao, boxIb, boxShader);
+		
+		/* render the boxes, second pass */
+		float scaleFactor = 1.1;
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
+		model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
 
-		mainRenderer.Draw(boxVao, boxIb, lightShader);
+		outlineShader.SetUniformMatrix4f("u_Model", model);
+		outlineShader.SetUniformMatrix4f("u_View", view);
+		outlineShader.SetUniformMatrix4f("u_Projection", projection);
+
+		GLCALL(glDisable(GL_DEPTH_TEST));
+		GLCALL(glStencilFunc(GL_NOTEQUAL, 1, 0xFF));
+		glStencilMask(0x00);
+		mainRenderer.Draw(boxVao, boxIb, outlineShader);
+
+		/*the second box*/
+		model = glm::mat4(1.0f);
+		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
+		model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+
+		outlineShader.SetUniformMatrix4f("u_Model", model);
+		mainRenderer.Draw(boxVao, boxIb, outlineShader);
+
+		glStencilMask(0xFF);
+		GLCALL(glEnable(GL_DEPTH_TEST));
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);

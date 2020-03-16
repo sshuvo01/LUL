@@ -21,6 +21,11 @@ bool GLLogCall(const char* function, const char* file, int line)
 	return true;
 }
 
+Renderer::Renderer()
+{
+	InitSettings();
+}
+
 void Renderer::Draw(const VertexArray & va, const IndexBuffer & ib, const Shader & shader) const
 {
 	shader.Bind();
@@ -32,7 +37,7 @@ void Renderer::Draw(const VertexArray & va, const IndexBuffer & ib, const Shader
 
 void Renderer::Clear() const
 {
-	GLCALL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT));
+	GLCALL(glClear(GL_COLOR_BUFFER_BIT|GL_DEPTH_BUFFER_BIT|GL_STENCIL_BUFFER_BIT));
 }
 
 void Renderer::InitSettings() const
@@ -41,4 +46,5 @@ void Renderer::InitSettings() const
 	//glEnable(GL_BLEND);
 	//GLCALL(glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA));
 	GLCALL(glEnable(GL_DEPTH_TEST));
+	//GLCALL(glEnable(GL_STENCIL_TEST));
 }
