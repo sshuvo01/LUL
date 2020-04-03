@@ -71,6 +71,11 @@
     <None Include="res\shaders\asd.vert" />
     <None Include="res\shaders\Outliner.vert" />
     <None Include="res\shaders\test.vert" />
+    <None Include="res\shaders\grass.vert" />
+    <None Include="res\shaders\vert\Box.vert" />
+    <None Include="res\shaders\frag\Box.frag" />
+    <None Include="res\shaders\frag\Framebuffer.frag" />
+    <None Include="res\shaders\vert\Framebuffer.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -133,6 +138,12 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\metal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\grass.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\blending_transparent_window.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

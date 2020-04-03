@@ -3,7 +3,7 @@
 #include "Texture.h"
 #include "stb/stb_image.h"
 
-Texture::Texture(const std::string & path, bool flipUV)
+Texture::Texture(const std::string & path,  GLenum repeatMode, bool flipUV)
 	: m_RendererID(0), m_FilePath(path), m_LocalBuffer(nullptr),
 	  m_Width(0), m_Height(0), m_BPP(0)
 {
@@ -33,8 +33,8 @@ Texture::Texture(const std::string & path, bool flipUV)
 
 	GLCALL( glGenerateMipmap(GL_TEXTURE_2D) );
 
-	GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT));
-	GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT));
+	GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, repeatMode));
+	GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, repeatMode));
 	GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR));
 	GLCALL(glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR));
 

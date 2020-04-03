@@ -13,6 +13,15 @@ Shader::Shader(const std::string & path)
 	Bind();
 }
 
+Shader::Shader(const std::string & vertexPath, const std::string & fragmentPath)
+{
+	std::string vertexSource = ReadShader(vertexPath);
+	std::string fragmentSource = ReadShader(fragmentPath);
+		
+	m_RendererID = CreateShader(vertexSource, fragmentSource);
+	Bind();
+}
+
 Shader::~Shader()
 {
 	//GLCALL(glDeleteProgram(m_RendererID));
@@ -60,7 +69,7 @@ void Shader::SetUniform4f(const std::string & name, const glm::vec4 & vec) const
 	Bind();
 	int loc = GetUniformLocation(name);
 	if (loc == -1) return;
-
+	
 	GLCALL(glUniform4f(loc, vec[0], vec[1], vec[2], vec[3]));
 }
 
@@ -84,11 +93,6 @@ void Shader::SetUniformMatrix4f(const std::string & name, const glm::mat4 & matr
 
 ShaderProgramSource Shader::ParseShader(const std::string & filepath)
 {
-	enum class ShaderType
-	{
-		NONE = -1, VERTEX = 0, FRAGMENT = 1
-	};
-
 	std::ifstream stream(filepath);
 
 	std::string line;
@@ -115,6 +119,20 @@ ShaderProgramSource Shader::ParseShader(const std::string & filepath)
 	}
 
 	return { ss[0].str(), ss[1].str() };
+}
+
+std::string Shader::ReadShader(const std::string & filepath)
+{
+	std::ifstream stream(filepath);
+	std::string line;
+	std::stringstream theShader;
+
+	while (getline(stream, line))
+	{
+		theShader << line << '\n';
+	}
+
+	return theShader.str();
 }
 
 unsigned int Shader::CompileShader(unsigned int type, const std::string& source)

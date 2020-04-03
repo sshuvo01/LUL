@@ -15,6 +15,8 @@ VertexArray::~VertexArray()
 
 void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& vbl)
 {
+	Bind();
+
 	vb.Bind();
 	auto& elements = vbl.GetElements();
 	

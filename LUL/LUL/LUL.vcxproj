@@ -156,11 +156,16 @@
     <None Include="res\shaders\asd.vert" />
     <None Include="res\shaders\Box.shader" />
     <None Include="res\shaders\Floor.shader" />
+    <None Include="res\shaders\frag\Box.frag" />
+    <None Include="res\shaders\frag\Framebuffer.frag" />
+    <None Include="res\shaders\grass.vert" />
     <None Include="res\shaders\Light.shader" />
     <None Include="res\shaders\modelLoading.shader" />
     <None Include="res\shaders\MyShader.shader" />
     <None Include="res\shaders\Outliner.vert" />
     <None Include="res\shaders\test.vert" />
+    <None Include="res\shaders\vert\Box.vert" />
+    <None Include="res\shaders\vert\Framebuffer.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Camera.h" />
@@ -180,9 +185,11 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\awesomeface.png" />
+    <Image Include="res\textures\blending_transparent_window.png" />
     <Image Include="res\textures\container.jpg" />
     <Image Include="res\textures\container2.png" />
     <Image Include="res\textures\container2_specular.png" />
+    <Image Include="res\textures\grass.png" />
     <Image Include="res\textures\marble.jpg" />
     <Image Include="res\textures\metal.png" />
   </ItemGroup>

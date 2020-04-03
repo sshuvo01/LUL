@@ -6,6 +6,7 @@
 #include <sstream>
 #include <glm/matrix.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <map>
 
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -145,7 +146,7 @@ static int CreateWindow(GLFWwindow*& window, int width, int height, const std::s
 }
 
 
-int Notmain()
+int notmain()
 {
 	/*
 	std::string path = "res/model/nanosuit/nanosuit.obj";
@@ -181,16 +182,40 @@ int Notmain()
 	ti.push_back(420);
 	ti.push_back(421);
 	*/
+	/*
 	PointLight pl = PointLight(glm::vec3(1.0f), 
 		glm::vec3(2.0f), glm::vec3(3.0f), glm::vec3(4.0f),
 		1.0f, 2.0f, 3.0f);
 
-	ShowVector(pl.GetSpecular());
-	ShowVector(pl.GetDiffuse());
-	ShowVector(pl.GetAmbient());
+	
+	std::map<float, std::string> ball;
 
-	std::cout << pl.GetAttenuation().quadratic;
-	//std::cout  << &ti[0] << std::endl;
+	std::map<float, std::string>::iterator iBegin = ball.begin();
+	std::map<float, std::string>::iterator iEnd = ball.end();
+	
+
+	ball[211.0f] = "abal";
+	ball[23.0f] = "asdfafs";
+	ball[3.0f] = "kick";
+	ball[2313.1f] = "a23rsdaf";
+
+	for (auto it = ball.begin(); it != ball.end(); it++)
+	{
+		 std::cout <<  ball[it->first] << std::endl;
+	}
+
+	std::cout << ball[2.0f] << std::endl;
+	
+	
+
+	*/
+	GLbitfield mask = 0;
+
+	if ((mask| GL_DEPTH_BUFFER_BIT) == GL_COLOR_BUFFER_BIT)
+	{
+		std::cout << "bokachoda" << std::endl;
+	}
+
 	std::cin.get();
 	return 0;
 }
@@ -281,58 +306,106 @@ int main(void)
 		0, 1, 2, 3, 4, 5
 	};
 
-	float cubeVertices[] = {
-		// positions          // texture Coords
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 0.0f,
+	float transparentVertices[] = {
+		// positions         // texture Coords (swapped y coordinates because texture is flipped upside down)
+		0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+		0.0f, -0.5f,  0.0f,  0.0f,  1.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
 
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 1.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f, -0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f, -0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f, -0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f, -0.5f, -0.5f,  0.0f, 1.0f,
-
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f,
-		 0.5f,  0.5f, -0.5f,  1.0f, 1.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		 0.5f,  0.5f,  0.5f,  1.0f, 0.0f,
-		-0.5f,  0.5f,  0.5f,  0.0f, 0.0f,
-		-0.5f,  0.5f, -0.5f,  0.0f, 1.0f
+		0.0f,  0.5f,  0.0f,  0.0f,  0.0f,
+		1.0f, -0.5f,  0.0f,  1.0f,  1.0f,
+		1.0f,  0.5f,  0.0f,  1.0f,  0.0f
 	};
 
+	float cubeVertices[] = {
+		// Back face
+   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
+	0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+	0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
+	0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
+   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
+   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+   // Front face
+   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+	0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+	0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+	0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
+   -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
+   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
+   // Left face
+   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+   -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
+   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
+   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
+   // Right face
+	0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+	0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+	0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
+	0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
+	0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
+	0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
+   // Bottom face
+   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+	0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
+	0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+	0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
+   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
+   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
+   // Top face
+   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+	0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+	0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
+	0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
+   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
+   -0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
+	};
 	
-	Renderer mainRenderer = Renderer();
+	float quadVertices[] = { 
+		// vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+		// positions   // texCoords
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		-1.0f, -1.0f,  0.0f, 0.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+
+		-1.0f,  1.0f,  0.0f, 1.0f,
+		 1.0f, -1.0f,  1.0f, 0.0f,
+		 1.0f,  1.0f,  1.0f, 1.0f
+	};
+
+	std::vector<glm::vec3> windows;
+	windows.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
+	windows.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
+	windows.push_back(glm::vec3(0.0f, 0.0f, 0.7f));
+	windows.push_back(glm::vec3(-0.3f, 0.0f, -2.3f));
+	windows.push_back(glm::vec3(0.5f, 0.0f, -0.6f));
+	
+	Renderer mainRenderer = Renderer(SCR_WIDTH, SCR_HEIGHT, true);
 	
 	/*box data*/
-	Shader boxShader("res/shaders/Box.shader");
+	//Shader boxShader("res/shaders/Box.shader");
+	Shader boxShader("res/shaders/vert/Box.vert", "res/shaders/frag/Box.frag");
 	Shader outlineShader("res/shaders/Outliner.vert");
+	
 	Texture boxTexture("res/textures/marble.jpg");
+	
+	/*frame buffer*/
+	Shader framebuffer("res/shaders/vert/Framebuffer.vert", "res/shaders/frag/Framebuffer.frag");
+	VertexArray frameVao = VertexArray();
+	VertexBuffer frameVb = VertexBuffer(quadVertices, sizeof(float) * 4 * 6);
+	VertexBufferLayout frameVbl = VertexBufferLayout();
+	frameVbl.Push<float>(2);
+	frameVbl.Push<float>(2);
+	frameVao.AddBuffer(frameVb, frameVbl);
+	IndexBuffer frameIb = IndexBuffer(planeIndices, 6);
+	/*-----------------*/
+	/*grass data*/
+	Shader grassShader("res/shaders/grass.vert");
+	Texture grassTexture("res/textures/blending_transparent_window.png", GL_CLAMP_TO_EDGE);
+	VertexArray grassVao = VertexArray();
+	VertexBuffer grassVb = VertexBuffer(transparentVertices, sizeof(float) * 5 * 6);
+	IndexBuffer grassIb = IndexBuffer(planeIndices, 6);
 
 	VertexArray boxVao = VertexArray();
 	VertexBuffer boxVb = VertexBuffer(cubeVertices, sizeof(float) * 5 * 36);
@@ -354,11 +427,16 @@ int main(void)
 	VertexBufferLayout floorVbl;
 	floorVbl.Push<float>(3);
 	floorVbl.Push<float>(2);
-	floorVao.AddBuffer(floorVb, floorVbl);
+	floorVao.AddBuffer(floorVb, boxVbl);
 	
-	GLCALL(glEnable(GL_STENCIL_TEST));
+	/*same layout for grass*/ 
+	grassVao.AddBuffer(grassVb, boxVbl);
 
+	/*blending settings initialized*/
+	mainRenderer.InitBlending();
 	/*render loop*/
+	std::map<float, glm::vec3> windowsDistance;
+
 	while (!glfwWindowShouldClose(window))
 	{	
 		////////////////////////
@@ -370,16 +448,20 @@ int main(void)
 		// -----
 		processInput(window);
 		////////////////////////
-		mainRenderer.Clear();
+		
 
 		// view/projection transformations
 		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom), 
 			(float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 model = glm::mat4(1.0f);
-
+		
+		/*frame buffer*/
+		mainRenderer.BindFramebuffer();
+		//glEnable(GL_DEPTH_TEST);
+		mainRenderer.EnableDepthTest();
+		mainRenderer.Clear(true, true);
 		/*render the floor*/
-		GLCALL(glStencilMask(0x00));
 		floorShader.SetUniformMatrix4f("u_Model", glm::mat4(1.0f));
 		floorShader.SetUniformMatrix4f("u_View", camera.GetViewMatrix());
 		floorShader.SetUniformMatrix4f("u_Projection", projection);
@@ -388,10 +470,10 @@ int main(void)
 		floorTexture.Bind(0);
 		mainRenderer.Draw(floorVao, floorIb, floorShader);
 
-		/*render the boxes, first pass*/
-		GLCALL(glStencilFunc(GL_ALWAYS, 1, 0xFF));
-		GLCALL(glStencilMask(0xFF));
-		GLCALL(glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE));
+		/*render the boxes */
+		//GLCALL(glEnable(GL_CULL_FACE));
+		//glFrontFace(GL_CCW);
+		//glCullFace(GL_BACK);
 
 		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
 		
@@ -409,31 +491,38 @@ int main(void)
 		boxShader.SetUniformMatrix4f("u_Model", model);
 		mainRenderer.Draw(boxVao, boxIb, boxShader);
 		
-		/* render the boxes, second pass */
-		float scaleFactor = 1.1;
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
-		model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+		//GLCALL(glDisable(GL_CULL_FACE));
+		 
+		/*draw windows, (actually windows)*/
+		grassShader.SetUniformMatrix4f("u_Projection", projection);
+		grassShader.SetUniformMatrix4f("u_View", view);
+		grassTexture.Bind(0);
+		grassShader.SetUniform1i("u_GrassTexture", 0);
 
-		outlineShader.SetUniformMatrix4f("u_Model", model);
-		outlineShader.SetUniformMatrix4f("u_View", view);
-		outlineShader.SetUniformMatrix4f("u_Projection", projection);
+		/*sort the windows-- distance*/
+		windowsDistance.clear();
+		for (int i = 0; i < windows.size(); i++)
+		{
+			float dist = glm::length(camera.Position - windows[i]);
+			windowsDistance[dist] = windows[i];
+		}
 
-		GLCALL(glDisable(GL_DEPTH_TEST));
-		GLCALL(glStencilFunc(GL_NOTEQUAL, 1, 0xFF));
-		glStencilMask(0x00);
-		mainRenderer.Draw(boxVao, boxIb, outlineShader);
+		for (auto iter = windowsDistance.rbegin(); iter != windowsDistance.rend(); iter++)
+		{
+			model = glm::mat4(1.0f);
+			model = glm::translate(model, iter->second);
 
-		/*the second box*/
-		model = glm::mat4(1.0f);
-		model = glm::translate(model, glm::vec3(2.0f, 0.0f, 0.0f));
-		model = glm::scale(model, glm::vec3(scaleFactor, scaleFactor, scaleFactor));
+			grassShader.SetUniformMatrix4f("u_Model", model);
+			mainRenderer.Draw(grassVao, grassIb, grassShader);
 
-		outlineShader.SetUniformMatrix4f("u_Model", model);
-		mainRenderer.Draw(boxVao, boxIb, outlineShader);
-
-		glStencilMask(0xFF);
-		GLCALL(glEnable(GL_DEPTH_TEST));
+		} // end of for
+		/*frame buffer ends*/
+		mainRenderer.UnbindFramebuffer();
+		//glDisable(GL_DEPTH_TEST);
+		mainRenderer.EnableDepthTest(false);
+		framebuffer.SetUniform1i("u_ScreenTexture", 0);
+		mainRenderer.BindTexture(0);
+		mainRenderer.Draw(frameVao, frameIb, framebuffer);
 
 		/* Swap front and back buffers */
 		glfwSwapBuffers(window);

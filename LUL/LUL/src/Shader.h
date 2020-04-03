@@ -8,6 +8,11 @@ struct ShaderProgramSource
 	std::string FragmentSource;
 };
 
+enum class ShaderType
+{
+	NONE = -1, VERTEX = 0, FRAGMENT = 1
+};
+
 class Shader
 {
 private:
@@ -15,6 +20,7 @@ private:
 	std::string m_Filepath;
 public:
 	Shader(const std::string& path);
+	Shader(const std::string& vertexPath, const std::string& fragmentPath);
 	~Shader();
 
 	void Bind() const;
@@ -28,6 +34,7 @@ public:
 	void SetUniformMatrix4f(const std::string& name, const glm::mat4& matrix) const;
 private:
 	ShaderProgramSource ParseShader(const std::string& filepath);
+	std::string ReadShader(const std::string& filepath);
 	unsigned int CompileShader(unsigned int type, const std::string& source);
 	unsigned int CreateShader(const std::string& vertexShader, const std::string& fragmentShader);
 	int GetUniformLocation(const std::string& uniformname) const;
