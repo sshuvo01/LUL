@@ -12,7 +12,7 @@ private:
 	unsigned char*		m_LocalBuffer;
 	int					m_Width, m_Height, m_BPP;
 public:
-	Texture(const std::string& path, GLenum repeatMode = GL_REPEAT, bool flipUV = false);
+	Texture(const std::string& path, bool gamma = false, GLenum repeatMode = GL_REPEAT, bool flipUV = false);
 	~Texture();
 
 	void Bind(unsigned int slot = 0) const;
@@ -27,4 +27,6 @@ public:
 	inline std::string GetFilePath() const { return m_FilePath; }
 	inline std::string GetFileName() const { return m_FileName; }
 	inline void SetFileName(const std::string& fileName) { m_FileName = fileName; }
+
+	inline unsigned int GetID() const { return m_RendererID; }
 };

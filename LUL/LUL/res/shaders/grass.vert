@@ -31,10 +31,10 @@ void main()
 	vec4 texValue;
 	texValue = texture(u_GrassTexture, v_texCoord);
 
-	//if(texValue.w < 0.1)
-	//{
-	//	discard;
-	//}
+	if(texValue.w < 0.1)
+	{
+		discard;
+	}
 
 	fragColor = texValue;
 }

@@ -18,7 +18,7 @@ public:
 	Light(cVec3r ambient, cVec3r diffuse, cVec3r specular);
 	Light(const LightProperty& property);
 	Light() {} // empty constructor
-
+	
 	// setters
 	inline void SetAmbient(cVec3r ambient) { m_Property.ambient = ambient; }
 	inline void SetDiffuse(cVec3r diffuse) { m_Property.diffuse = diffuse; }

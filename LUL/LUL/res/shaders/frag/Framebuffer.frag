@@ -40,4 +40,5 @@ void main()
 
 	//vec4 bla = texture(u_ScreenTexture, v_TexCoord);
 	finalFragColor = vec4(col, 1.0);
+	finalFragColor = texture(u_ScreenTexture, v_TexCoord);
 }

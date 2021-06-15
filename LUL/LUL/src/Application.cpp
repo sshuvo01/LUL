@@ -24,7 +24,10 @@
 #include "Mesh.h"
 #include "Model.h"
 #include "PointLight.h"
-
+#include "Cubemap.h"
+#include "Box.h"
+#include "Plane.h"
+#include "DepthMap.h"
 
 const int SCR_WIDTH = 640*2;
 const int SCR_HEIGHT = 480*2;
@@ -37,7 +40,8 @@ float lastX = SCR_WIDTH / 2.0f;
 float lastY = SCR_HEIGHT / 2.0f;
 bool firstMouse = true;
 ///
-
+bool enableBlinn = true;
+///
 static void ShowMatrix(const glm::mat4& matrix)
 {
 	for (int i = 0; i < 4; i++)
@@ -83,6 +87,10 @@ static void processInput(GLFWwindow *window)
 		camera.ProcessKeyboard(LEFT, deltaTime);
 	if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS)
 		camera.ProcessKeyboard(RIGHT, deltaTime);
+	if (glfwGetKey(window, GLFW_KEY_B) == GLFW_PRESS)
+	{
+		enableBlinn = !enableBlinn;
+	}
 }
 
 static void mouse_callback(GLFWwindow* window, double xpos, double ypos)
@@ -146,7 +154,7 @@ static int CreateWindow(GLFWwindow*& window, int width, int height, const std::s
 }
 
 
-int notmain()
+int maintest()
 {
 	/*
 	std::string path = "res/model/nanosuit/nanosuit.obj";
@@ -209,18 +217,531 @@ int notmain()
 	
 
 	*/
-	GLbitfield mask = 0;
 
-	if ((mask| GL_DEPTH_BUFFER_BIT) == GL_COLOR_BUFFER_BIT)
-	{
-		std::cout << "bokachoda" << std::endl;
-	}
+	////////////////////////
+	int aa = 7;
+	const int * ptr;
+	ptr = &aa;
+
+	int value2 = 420;
+	int *const klang = &value2;
+	*klang = 212;
+	
+	std::cout << *klang << std::endl;
+
+
+	std::string face[6] = {
+		"top",
+		"bottom",
+		"right",
+		"left",
+		"back",
+		"front"
+	};
+
+	const std::string* ptrstr = face;
+
+	std::cout << ptrstr[0];
 
 	std::cin.get();
 	return 0;
 }
 
-int main(void)
+void RenderScene(const Renderer& renderer, const Shader& shader, 
+	const Plane& plane, const Box& box)
+{
+	// set the model matrix in this function
+	// draw the plane first
+	glm::mat4 model = glm::mat4(1.0f);
+	shader.SetUniformMatrix4f("u_Model", model);
+	renderer.Draw(plane.GetVAO(), plane.GetIB(), shader);
+	// first box
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(0.0f, 1.5f, 0.0));
+	model = glm::scale(model, glm::vec3(0.5f));
+	shader.SetUniformMatrix4f("u_Model", model);
+	renderer.Draw(box.GetVAO(), box.GetIB(), shader);
+	// second box
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(2.0f, 0.0f, 1.0));
+	model = glm::scale(model, glm::vec3(0.5f));
+	shader.SetUniformMatrix4f("u_Model", model);
+	renderer.Draw(box.GetVAO(), box.GetIB(), shader);
+	// third box
+	model = glm::mat4(1.0f);
+	model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 2.0));
+	model = glm::rotate(model, glm::radians(60.0f), glm::normalize(glm::vec3(1.0, 0.0, 1.0)));
+	model = glm::scale(model, glm::vec3(0.25));
+	shader.SetUniformMatrix4f("u_Model", model);
+	renderer.Draw(box.GetVAO(), box.GetIB(), shader);
+}
+
+int mainmovedto2(void)
+{
+	GLFWwindow* window;
+	int code = CreateWindow(window, SCR_WIDTH, SCR_HEIGHT, "SSS");
+
+	Renderer mainRenderer = Renderer(SCR_WIDTH, SCR_HEIGHT);
+	DepthMap depthMap = DepthMap();
+
+	Box box = Box();
+	Plane plane = Plane();
+	Shader test2 = Shader("res/shaders/vert/test2.vert", "res/shaders/frag/test2.frag");
+	Shader depthMapShader = Shader("res/shaders/vert/shadowmap.vert", 
+		"res/shaders/frag/shadowmap.frag");                                                                                                                           
+	Texture woodTexture = Texture("res/textures/wood.png"); 
+	Shader shadowShader = Shader("res/shaders/vert/shadow.vert",
+		"res/shaders/frag/shadow.frag");
+	/*lightspace transform*/
+	float nearPlane = 1.0f, farPlane = 7.5f;
+	glm::mat4 lightProjection = 
+		glm::ortho(-10.0f, 10.0f, -10.0f, 10.0f, nearPlane, farPlane);
+	glm::mat4 lightView = glm::lookAt( glm::vec3(-2.0f, 4.0f, -1.0f),
+		glm::vec3(0.0f, 0.0f, 0.0f),
+		glm::vec3(0.0f, 1.0f, 0.0f));
+	
+	glm::mat4 lightSpaceMatrix = lightProjection * lightView;
+	glm::vec3 lightPos(-2.0f, 4.0f, -1.0f);
+
+	while (!glfwWindowShouldClose(window))
+	{
+		////////////////////////
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		// input
+		// -----
+		processInput(window);
+		////////////////////////
+		mainRenderer.EnableDepthTest(true);
+		/*------*/
+		/*render the depth map*/
+		depthMap.BindFramebuffer();
+		depthMapShader.SetUniformMatrix4f("u_LightSpaceMatrix", lightSpaceMatrix);
+		mainRenderer.Clear(false, true);
+		mainRenderer.ChangeViewport(depthMap.GetWidht(), depthMap.GetHeight());
+		RenderScene(mainRenderer, depthMapShader, plane, box);
+		depthMap.UnbindFramebuffer();
+		/*render the original scene*/
+		mainRenderer.Clear(true, true);
+		mainRenderer.ChangeViewport();
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
+			(float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		
+		//test2.SetUniformMatrix4f("u_View", view);
+		//test2.SetUniformMatrix4f("u_Projection", projection);
+		//woodTexture.Bind(0);
+		//test2.SetUniform1i("u_Texture", 0);
+		
+		shadowShader.SetUniformMatrix4f("u_View", view);
+		shadowShader.SetUniformMatrix4f("u_Projection", projection);
+		shadowShader.SetUniformMatrix4f("u_LightSpaceMatrix", lightSpaceMatrix);
+		shadowShader.SetUniform3f("u_LightPos", lightPos);
+		shadowShader.SetUniform3f("u_CameraPos", camera.Position);
+
+		woodTexture.Bind(0);
+		shadowShader.SetUniform1i("u_DiffuseTexture", 0);
+		depthMap.BindTexture(1);
+		shadowShader.SetUniform1i("u_DepthMap", 1);
+
+		RenderScene(mainRenderer, shadowShader, plane, box);
+		/*--------------*/
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	return 0;
+}
+
+int mainblinnPhong(void)
+{
+	GLFWwindow* window;
+	int code = CreateWindow(window, SCR_WIDTH, SCR_HEIGHT, "SSS");
+	
+	float planeVertices[] = {
+		// positions            // normals         // texcoords
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,   0.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+
+		 10.0f, -0.5f,  10.0f,  0.0f, 1.0f, 0.0f,  10.0f,  0.0f,
+		-10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,   0.0f, 10.0f,
+		 10.0f, -0.5f, -10.0f,  0.0f, 1.0f, 0.0f,  10.0f, 10.0f
+	};
+
+	unsigned int indices[6] = { 0, 1, 2, 3, 4, 5 };
+
+	Renderer mainRenderer = Renderer(SCR_WIDTH, SCR_HEIGHT);
+	VertexArray vao = VertexArray();
+	VertexBuffer vb = VertexBuffer(planeVertices, sizeof(float)*8*6);
+	VertexBufferLayout vbl = VertexBufferLayout();
+	vbl.Push<float>(3);
+	vbl.Push<float>(3);
+	vbl.Push<float>(2);
+	vao.AddBuffer(vb, vbl);
+
+	IndexBuffer ib = IndexBuffer(indices, 6);
+
+	Shader shd = Shader("res/shaders/vert/blinnphong.vert",
+		"res/shaders/frag/blinnphong.frag");
+
+	Texture planeTexture = Texture("res/textures/wood.png");
+
+	glm::vec3 lightPos = glm::vec3(0.0f, 0.0f, 0.0f);
+
+	while (!glfwWindowShouldClose(window))
+	{
+		////////////////////////
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		// input
+		// -----
+		processInput(window);
+		////////////////////////
+		mainRenderer.EnableDepthTest(true);
+		mainRenderer.Clear(true, true);
+		/*------*/
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
+			(float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::translate(model, glm::vec3(0.0f, -5.0f, -10.0f));
+
+		shd.SetUniformMatrix4f("u_Projection", projection);
+		shd.SetUniformMatrix4f("u_View", view);
+		shd.SetUniformMatrix4f("u_Model", model);
+		shd.SetUniform1i("u_PlaneTex", 0);
+		shd.SetUniform3f("u_LightPos", lightPos);
+		shd.SetUniform3f("u_CameraPos", camera.Position);
+		shd.SetUniform1i("u_Blinn", (int)enableBlinn);
+		
+		planeTexture.Bind(0);
+
+		mainRenderer.Draw(vao, ib, shd);
+		
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	return 0;
+}
+
+int maasina(void)
+{
+	GLFWwindow* window;
+	int code = CreateWindow(window, SCR_WIDTH, SCR_HEIGHT, "SSS");
+	
+	Renderer mainRenderer = Renderer(SCR_WIDTH, SCR_HEIGHT);
+	Model nanosuitModel = Model("res/model/nanosuit/nanosuit.obj");
+	Shader nanosuitShader = Shader("res/shaders/vert/nanosuit.vert",
+		"res/shaders/frag/nanosuit.frag", "res/shaders/geom/nanosuit.geom");
+
+	while (!glfwWindowShouldClose(window))
+	{
+		////////////////////////
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		// input
+		// -----
+		processInput(window);
+		////////////////////////
+		mainRenderer.EnableDepthTest(true);
+		mainRenderer.Clear(true, true);
+		/*------*/
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
+			(float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
+		glm::translate(model, glm::vec3(0.0f, -5.0f, -10.0f));
+
+		nanosuitShader.SetUniformMatrix4f("u_Projection", projection);
+		nanosuitShader.SetUniformMatrix4f("u_View", view);
+		nanosuitShader.SetUniformMatrix4f("u_Model", model);
+		nanosuitShader.SetUniform1f("time", glfwGetTime());
+
+		nanosuitModel.Draw(nanosuitShader, mainRenderer);
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	return 0;
+}
+
+int mainInstancingModel(void)
+{
+	GLFWwindow* window;
+	int code = CreateWindow(window, SCR_WIDTH, SCR_HEIGHT, "SSS");
+
+	float quadVertices[] = {
+		// positions     // colors
+		-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+		 0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+		-0.05f, -0.05f,  0.0f, 0.0f, 1.0f,
+
+		-0.05f,  0.05f,  1.0f, 0.0f, 0.0f,
+		 0.05f, -0.05f,  0.0f, 1.0f, 0.0f,
+		 0.05f,  0.05f,  0.0f, 1.0f, 1.0f
+	};
+
+	unsigned int indices[6];
+	for (int i = 0; i < 6; i++)
+	{
+		indices[i] = i;
+	}
+
+	VertexArray pointsVao = VertexArray();
+	VertexBuffer pointsVb = VertexBuffer(quadVertices, 30 * sizeof(float));
+	VertexBufferLayout pointsVbl = VertexBufferLayout();
+	pointsVbl.Push<float>(2);
+	pointsVbl.Push<float>(3);
+	pointsVao.AddBuffer(pointsVb, pointsVbl);
+	IndexBuffer pointsIndices = IndexBuffer(indices, 6);
+	Shader instancingShader = Shader("res/shaders/vert/Instancing.vert", "res/shaders/frag/Instancing.frag");
+	Renderer mainRenderer = Renderer(SCR_WIDTH, SCR_HEIGHT);
+
+	Shader planetShader = Shader("res/shaders/vert/planet.vert", 
+		"res/shaders/frag/planet.frag");
+
+
+	Shader rockShader = Shader("res/shaders/vert/rock.vert", "res/shaders/frag/rock.frag");
+
+
+	//Model nanosuitModel("res/model/nanosuit/nanosuit.obj");
+
+	glm::vec2 translations[100];
+	int index = 0;
+	float offsets = 0.1f;
+	
+	for (int y = -10; y < 10; y += 2)
+	{
+		for (int x = -10; x < 10; x += 2)
+		{
+			glm::vec2 translation;
+			translation.x = (float)x / 10.0f + offsets;
+			translation.y = (float)y / 10.0f + offsets;
+			translations[index++] = translation;
+		}
+	}
+
+	//pointsVao.Bind();
+	VertexBuffer instanceBuffer = VertexBuffer(translations, sizeof(glm::vec2) * 100);
+	pointsVao.AddInstanceBuffer(instanceBuffer, DataType::VEC2, 2, 1);
+
+	//unsigned int instancedBuffer;
+	//GLCALL(glCreateBuffers(1, &instancedBuffer));
+	//GLCALL(glBindBuffer(GL_ARRAY_BUFFER, instancedBuffer));
+	//GLCALL(glBufferData(GL_ARRAY_BUFFER, sizeof(glm::vec2) * 100, translations, GL_STATIC_DRAW));
+	//GLCALL(glEnableVertexAttribArray(2));
+	//GLCALL(glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 2 * sizeof(float), (void*)0));
+	//GLCALL(glVertexAttribDivisor(2, 1));
+	
+	////////////////////////
+	unsigned int amount = 10000;
+	glm::mat4 *modelMatrices;
+	modelMatrices = new glm::mat4[amount];
+	srand(glfwGetTime()); // initialize random seed	
+	float radius = 50.0;
+	float offset = 6.5f;
+	for (unsigned int i = 0; i < amount; i++)
+	{
+		glm::mat4 model = glm::mat4(1.0f);
+		// 1. translation: displace along circle with 'radius' in range [-offset, offset]
+		float angle = (float)i / (float)amount * 360.0f;
+		float displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float x = sin(angle) * radius + displacement;
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float y = displacement * 0.4f; // keep height of field smaller compared to width of x and z
+		displacement = (rand() % (int)(2 * offset * 100)) / 100.0f - offset;
+		float z = cos(angle) * radius + displacement;
+		model = glm::translate(model, glm::vec3(x, y, z));
+
+		// 2. scale: scale between 0.05 and 0.25f
+		float scale = (rand() % 20) / 100.0f + 0.05;
+		model = glm::scale(model, glm::vec3(scale));
+
+		// 3. rotation: add random rotation around a (semi)randomly picked rotation axis vector
+		float rotAngle = (rand() % 360);
+		model = glm::rotate(model, rotAngle, glm::vec3(0.4f, 0.6f, 0.8f));
+
+		// 4. now add to list of matrices
+		modelMatrices[i] = model;
+	}
+	/////////////////////////
+	VertexBuffer matrixBuffer = VertexBuffer(modelMatrices, amount * sizeof(glm::mat4));
+	Model planetModel("res/model/planet/planet.obj");
+	Model rockModel("res/model/rock/rock.obj");
+
+	matrixBuffer.Bind();
+	for (int i = 0; i < rockModel.m_Meshes.size(); i++)
+	{
+		rockModel.m_Meshes[i].m_VA.AddInstanceBuffer(matrixBuffer, DataType::MAT4, 3, 1);
+		/*
+		rockModel.m_Meshes[i].m_VA.Bind();
+		glEnableVertexAttribArray(3);
+		glVertexAttribPointer(3, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)0);
+		glEnableVertexAttribArray(4);
+		glVertexAttribPointer(4, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(sizeof(glm::vec4)));
+		glEnableVertexAttribArray(5);
+		glVertexAttribPointer(5, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(2 * sizeof(glm::vec4)));
+		glEnableVertexAttribArray(6);
+		glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, sizeof(glm::mat4), (void*)(3 * sizeof(glm::vec4)));
+
+		glVertexAttribDivisor(3, 1);
+		glVertexAttribDivisor(4, 1);
+		glVertexAttribDivisor(5, 1);
+		glVertexAttribDivisor(6, 1);
+
+		glBindVertexArray(0);
+		*/
+	}
+
+
+	while (!glfwWindowShouldClose(window))
+	{
+		////////////////////////
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		// input
+		// -----
+		processInput(window);
+		////////////////////////
+		mainRenderer.EnableDepthTest(true);
+		mainRenderer.Clear(true, true);
+		/*
+		for (int i = 0; i < 100; i++)
+		{
+			std::string uniformName = "u_Offsets[" + std::to_string(i) + "]";
+			instancingShader.SetUniform2f(uniformName, translations[i]);
+		}
+		*/
+		//instancingShader.Bind();
+		//pointsVao.Bind();
+		//pointsIndices.Bind();
+		
+		glm::mat4 projection = glm::perspective(glm::radians(camera.Zoom),
+			(float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
+		glm::mat4 view = camera.GetViewMatrix();
+		glm::mat4 model = glm::mat4(1.0f);
+
+		planetShader.SetUniformMatrix4f("u_Model", model);
+		planetShader.SetUniformMatrix4f("u_View", view);
+		planetShader.SetUniformMatrix4f("u_Projection", projection);
+		
+		planetModel.Draw(planetShader, mainRenderer);
+		//rockModel.Draw(planetShader, mainRenderer);
+		/*the rocks*/
+		/*
+		for (int i = 0; i < amount; i++)
+		{
+			planetShader.SetUniformMatrix4f("u_Model", modelMatrices[i]);
+			rockModel.Draw(planetShader, mainRenderer);
+		}
+		*/
+		
+		
+		//GLCALL(glDrawElementsInstanced(GL_TRIANGLES, pointsIndices.GetCount(), 
+			//GL_UNSIGNED_INT, nullptr, 100));
+		rockShader.Bind();
+		rockShader.SetUniform1i("texture_diffuse1", 0);
+		rockModel.m_Textures[0].Bind(0);
+		//glActiveTexture(GL_TEXTURE0);
+		//glBindTexture(GL_TEXTURE_2D, rock.textures_loaded[0].id);
+
+		rockShader.SetUniformMatrix4f("u_View", view);
+		rockShader.SetUniformMatrix4f("u_Projection", projection);
+
+		for (int i = 0; i < rockModel.m_Meshes.size(); i++)
+		{
+			//rockModel.m_Meshes[i].Draw(rockShader, mainRenderer);
+			//glDrawElementsInstanced(GL_TRIANGLES, pointsIndices.GetCount(),
+				//GL_UNSIGNED_INT, nullptr, 100);
+			rockModel.m_Meshes[i].m_VA.Bind();
+			rockModel.m_Meshes[i].m_IB.Bind();
+			
+			glDrawElementsInstanced(GL_TRIANGLES, rockModel.m_Meshes[i].m_IB.GetCount(),
+				GL_UNSIGNED_INT, nullptr, amount);
+		} // e/nd of for
+		//mainRenderer.Draw(pointsVao, pointsIndices, instancingShader, PrimitiveShape::TRIANGLE);
+
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	return 0;
+}
+
+int mainGeometryShader(void)
+{
+	GLFWwindow* window;
+	int code = CreateWindow(window, SCR_WIDTH, SCR_HEIGHT, "SSS");
+
+	float points[] = {
+		-0.5f,  0.5f, 1.0f, 0.0f, 0.0f, // top-left
+		0.5f,  0.5f, 0.0f, 1.0f, 0.0f, // top-right
+		0.5f, -0.5f, 0.0f, 0.0f, 1.0f, // bottom-right
+		-0.5f, -0.5f, 1.0f, 1.0f, 0.0f  // bottom-left
+	};
+
+	unsigned int indices[4];
+	for (int i = 0; i < 4; i++)
+	{
+		indices[i] = i;
+	}
+
+	VertexArray pointsVao = VertexArray();
+	VertexBuffer pointsVb = VertexBuffer(points, 20 * sizeof(float));
+	VertexBufferLayout pointsVbl = VertexBufferLayout();
+	pointsVbl.Push<float>(2);
+	pointsVbl.Push<float>(3);
+	pointsVao.AddBuffer(pointsVb, pointsVbl);
+	IndexBuffer pointsIndices = IndexBuffer(indices, 4);
+	Shader testShader = Shader("res/shaders/vert/test.vert", "res/shaders/frag/test.frag",
+		"res/shaders/geom/test.geom");
+	Renderer mainRenderer = Renderer(SCR_WIDTH, SCR_HEIGHT);
+
+	
+	while (!glfwWindowShouldClose(window))
+	{
+		////////////////////////
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		// input
+		// -----
+		processInput(window);
+		////////////////////////
+		mainRenderer.EnableDepthTest(false);
+		mainRenderer.Clear(true, false);
+		mainRenderer.Draw(pointsVao, pointsIndices, testShader, PrimitiveShape::POINT);
+
+		/* Swap front and back buffers */
+		glfwSwapBuffers(window);
+		/* Poll for and process events */
+		glfwPollEvents();
+	}
+
+	return 0;
+}
+
+
+int main2(void)
 {
 	GLFWwindow* window;
 	int code = CreateWindow(window, SCR_WIDTH, SCR_HEIGHT, "SSS");
@@ -318,48 +839,48 @@ int main(void)
 	};
 
 	float cubeVertices[] = {
-		// Back face
-   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // Bottom-left
-	0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-	0.5f, -0.5f, -0.5f,  1.0f, 0.0f, // bottom-right         
-	0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right
-   -0.5f, -0.5f, -0.5f,  0.0f, 0.0f, // bottom-left
-   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-   // Front face
-   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-	0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-	0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-	0.5f,  0.5f,  0.5f,  1.0f, 1.0f, // top-right
-   -0.5f,  0.5f,  0.5f,  0.0f, 1.0f, // top-left
-   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left
-   // Left face
-   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-   -0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-left
-   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-left
-   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-   -0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-right
-   // Right face
-	0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-	0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-	0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right         
-	0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // bottom-right
-	0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // top-left
-	0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-left     
-   // Bottom face
-   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-	0.5f, -0.5f, -0.5f,  1.0f, 1.0f, // top-left
-	0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-	0.5f, -0.5f,  0.5f,  1.0f, 0.0f, // bottom-left
-   -0.5f, -0.5f,  0.5f,  0.0f, 0.0f, // bottom-right
-   -0.5f, -0.5f, -0.5f,  0.0f, 1.0f, // top-right
-   // Top face
-   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-	0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-	0.5f,  0.5f, -0.5f,  1.0f, 1.0f, // top-right     
-	0.5f,  0.5f,  0.5f,  1.0f, 0.0f, // bottom-right
-   -0.5f,  0.5f, -0.5f,  0.0f, 1.0f, // top-left
-   -0.5f,  0.5f,  0.5f,  0.0f, 0.0f  // bottom-left        
+		// positions          // normals    // texture coords
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  1.0f,  1.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  1.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f,  0.0f, -1.0f,  0.0f,  0.0f,
+
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  1.0f,  1.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f,  0.0f,  1.0f,  0.0f,  0.0f,
+
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		-0.5f, -0.5f, -0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		-0.5f, -0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f, -1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		 0.5f, -0.5f, -0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  1.0f,
+		 0.5f, -0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  0.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  1.0f,  0.0f,  0.0f,  1.0f,  0.0f,
+
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+		 0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  1.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+		 0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  1.0f,  0.0f,
+		-0.5f, -0.5f,  0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  0.0f,
+		-0.5f, -0.5f, -0.5f,  0.0f, -1.0f,  0.0f,  0.0f,  1.0f,
+
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f,
+		 0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  1.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+		 0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  1.0f,  0.0f,
+		-0.5f,  0.5f,  0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  0.0f,
+		-0.5f,  0.5f, -0.5f,  0.0f,  1.0f,  0.0f,  0.0f,  1.0f
 	};
 	
 	float quadVertices[] = { 
@@ -374,9 +895,79 @@ int main(void)
 		 1.0f,  1.0f,  1.0f, 1.0f
 	};
 
+	float skyboxVertices[] = {
+		// positions          
+		-1.0f,  1.0f, -1.0f,
+		-1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f, -1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+
+		-1.0f, -1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f,
+		-1.0f, -1.0f,  1.0f,
+
+		-1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f, -1.0f,
+		 1.0f,  1.0f,  1.0f,
+		 1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f,  1.0f,
+		-1.0f,  1.0f, -1.0f,
+
+		-1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f, -1.0f,
+		 1.0f, -1.0f, -1.0f,
+		-1.0f, -1.0f,  1.0f,
+		 1.0f, -1.0f,  1.0f
+	};
+
+	/*skybox*/
+	VertexArray skyVao = VertexArray();
+	VertexBuffer skyVb = VertexBuffer(skyboxVertices, sizeof(float) * 36 * 3);
+	VertexBufferLayout skyVbl = VertexBufferLayout();
+	skyVbl.Push<float>(3);
+	skyVao.AddBuffer(skyVb, skyVbl);
+	IndexBuffer skyIb = IndexBuffer(indices, 36);
+
+	Shader skyboxShader = Shader("res/shaders/vert/Skybox.vert", "res/shaders/frag/Skybox.frag");
+	Shader kriss = Shader("res/shaders/vert/test.vert", "res/shaders/frag/test.frag", 
+		"res/shaders/geom/test.geom");
+
+	std::string faces[6] = {
+		"right.jpg",
+		"left.jpg",
+		"top.jpg",
+		"bottom.jpg",
+		"front.jpg",
+		"back.jpg"
+	};
+	
+	Cubemap skyboxCubemap = Cubemap("res/Cubemaps/skybox", faces);
+	/*skybox*/
+
+
 	std::vector<glm::vec3> windows;
-	windows.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
-	windows.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
+	//windows.push_back(glm::vec3(-1.5f, 0.0f, -0.48f));
+	//windows.push_back(glm::vec3(1.5f, 0.0f, 0.51f));
 	windows.push_back(glm::vec3(0.0f, 0.0f, 0.7f));
 	windows.push_back(glm::vec3(-0.3f, 0.0f, -2.3f));
 	windows.push_back(glm::vec3(0.5f, 0.0f, -0.6f));
@@ -408,10 +999,11 @@ int main(void)
 	IndexBuffer grassIb = IndexBuffer(planeIndices, 6);
 
 	VertexArray boxVao = VertexArray();
-	VertexBuffer boxVb = VertexBuffer(cubeVertices, sizeof(float) * 5 * 36);
+	VertexBuffer boxVb = VertexBuffer(cubeVertices, sizeof(float) * 8 * 36);
 	IndexBuffer boxIb = IndexBuffer(indices, 36);
 
 	VertexBufferLayout boxVbl;
+	boxVbl.Push<float>(3);
 	boxVbl.Push<float>(3);
 	boxVbl.Push<float>(2);
 	boxVao.AddBuffer(boxVb, boxVbl);
@@ -427,10 +1019,10 @@ int main(void)
 	VertexBufferLayout floorVbl;
 	floorVbl.Push<float>(3);
 	floorVbl.Push<float>(2);
-	floorVao.AddBuffer(floorVb, boxVbl);
+	floorVao.AddBuffer(floorVb, floorVbl);
 	
 	/*same layout for grass*/ 
-	grassVao.AddBuffer(grassVb, boxVbl);
+	grassVao.AddBuffer(grassVb, floorVbl);
 
 	/*blending settings initialized*/
 	mainRenderer.InitBlending();
@@ -456,11 +1048,14 @@ int main(void)
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 model = glm::mat4(1.0f);
 		
+
 		/*frame buffer*/
 		mainRenderer.BindFramebuffer();
+		mainRenderer.Clear(true, true);
+
 		//glEnable(GL_DEPTH_TEST);
 		mainRenderer.EnableDepthTest();
-		mainRenderer.Clear(true, true);
+		
 		/*render the floor*/
 		floorShader.SetUniformMatrix4f("u_Model", glm::mat4(1.0f));
 		floorShader.SetUniformMatrix4f("u_View", camera.GetViewMatrix());
@@ -477,12 +1072,15 @@ int main(void)
 
 		model = glm::translate(model, glm::vec3(-1.0f, 0.0f, -1.0f));
 		
+		boxShader.SetUniform3f("u_CameraPos", camera.Position);
 		boxShader.SetUniformMatrix4f("u_Model", model);
 		boxShader.SetUniformMatrix4f("u_View", view);
 		boxShader.SetUniformMatrix4f("u_Projection", projection);
 
 		boxShader.SetUniform1i("u_BoxTexture", 0);
 		boxTexture.Bind(0);
+		boxShader.SetUniform1i("u_SkyboxTexture", 1);
+		skyboxCubemap.Bind(1); // another texture;;;
 		mainRenderer.Draw(boxVao, boxIb, boxShader);
 
 		// another box
@@ -516,8 +1114,27 @@ int main(void)
 			mainRenderer.Draw(grassVao, grassIb, grassShader);
 
 		} // end of for
-		/*frame buffer ends*/
+
+		/*skybox*/
+		
+		mainRenderer.EnableDepthWriting(false);//disable depth writing
+		skyboxShader.SetUniformMatrix4f("u_Projection", projection);
+
+		glm::mat4 skyView = glm::mat4(glm::mat3(view));
+		skyboxShader.SetUniformMatrix4f("u_View", skyView);
+		skyboxShader.SetUniformMatrix4f("u_Model", model);
+
+		skyboxShader.SetUniform1i("u_SkyboxTexture", 0);
+		skyboxCubemap.Bind(0);
+
+		mainRenderer.Draw(skyVao, skyIb, skyboxShader);
+
+		mainRenderer.EnableDepthWriting(true); //restore depth writing
+
+		/*end of skybox*/
+
 		mainRenderer.UnbindFramebuffer();
+		/*end of frame buffer*/
 		//glDisable(GL_DEPTH_TEST);
 		mainRenderer.EnableDepthTest(false);
 		framebuffer.SetUniform1i("u_ScreenTexture", 0);

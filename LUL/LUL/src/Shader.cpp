@@ -13,12 +13,19 @@ Shader::Shader(const std::string & path)
 	Bind();
 }
 
-Shader::Shader(const std::string & vertexPath, const std::string & fragmentPath)
+Shader::Shader(const std::string & vertexPath, const std::string & fragmentPath, 
+	const std::string& geometryPath)
 {
 	std::string vertexSource = ReadShader(vertexPath);
 	std::string fragmentSource = ReadShader(fragmentPath);
-		
-	m_RendererID = CreateShader(vertexSource, fragmentSource);
+	std::string geometrySource = "";
+
+	if (geometryPath != "")
+	{
+		geometrySource = ReadShader(geometryPath);
+	}
+
+	m_RendererID = CreateShader(vertexSource, fragmentSource, geometrySource);
 	Bind();
 }
 
@@ -53,6 +60,15 @@ void Shader::SetUniform1f(const std::string & name, float value) const
 	if (loc == -1) return;
 
 	GLCALL(glUniform1f(loc, value));
+}
+
+void Shader::SetUniform2f(const std::string& name, const glm::vec2& vec) const
+{
+	Bind();
+	int loc = GetUniformLocation(name);
+	if (loc == -1) return;
+
+	GLCALL(glUniform2f(loc, vec.x, vec.y));
 }
 
 void Shader::SetUniform4f(const std::string& name, float v0, float v1, float v2, float v3) const
@@ -124,6 +140,12 @@ ShaderProgramSource Shader::ParseShader(const std::string & filepath)
 std::string Shader::ReadShader(const std::string & filepath)
 {
 	std::ifstream stream(filepath);
+
+	if (!stream.is_open())
+	{
+		std::cout << "ERROR: Failed to open " << filepath << std::endl;
+	}
+
 	std::string line;
 	std::stringstream theShader;
 
@@ -161,19 +183,36 @@ unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 	return id;
 }
 
-unsigned int Shader::CreateShader(const std::string & vertexShader, const std::string & fragmentShader)
+unsigned int Shader::CreateShader(const std::string & vertexShader, const std::string & fragmentShader,
+	const std::string& geometryShader)
 {
 	unsigned int program = glCreateProgram();
 	unsigned int vs = CompileShader(GL_VERTEX_SHADER, vertexShader);
 	unsigned int fs = CompileShader(GL_FRAGMENT_SHADER, fragmentShader);
+	unsigned int gs;
+	
+	if (geometryShader != "")
+	{
+		gs = CompileShader(GL_GEOMETRY_SHADER, geometryShader);
+	}
 
 	GLCALL( glAttachShader(program, vs) );
 	GLCALL( glAttachShader(program, fs) );
+
+	if (geometryShader != "")
+	{
+		GLCALL(glAttachShader(program, gs));
+	}
+
 	GLCALL( glLinkProgram(program));
 	GLCALL( glValidateProgram(program));
 
 	GLCALL(glDeleteShader(fs));
 	GLCALL(glDeleteShader(vs));
+	if (geometryShader != "")
+	{
+		GLCALL(glDeleteShader(gs));
+	}
 
 	return program;
 }

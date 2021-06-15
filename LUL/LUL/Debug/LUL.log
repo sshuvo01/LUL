@@ -1,24 +1,24 @@
-﻿  Application.cpp
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(92): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(93): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(97): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(98): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(100): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(101): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(108): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(233): warning C4305: 'initializing': truncation from 'double' to 'float'
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(443): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-e:\programming\opengl\cherno\opengl\lul\lul\src\application.cpp(504): warning C4018: '<': signed/unsigned mismatch
-  Camera.cpp
-  IndexBuffer.cpp
-  Mesh.cpp
-  Model.cpp
-  Renderer.cpp
-  Shader.cpp
-  Texture.cpp
-  VertexArray.cpp
-e:\programming\opengl\cherno\opengl\lul\lul\src\vertexarray.cpp(23): warning C4018: '<': signed/unsigned mismatch
-  VertexBuffer.cpp
-  VertexBufferLayout.cpp
-  Generating Code...
+﻿  ApplicationAdvCG.cpp
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(100): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(101): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(105): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(106): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(108): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(109): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(116): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(309): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(503): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(596): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(616): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(700): warning C4244: 'argument': conversion from 'double' to 'unsigned int', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(717): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(721): warning C4244: 'initializing': conversion from 'int' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(733): warning C4018: '<': signed/unsigned mismatch
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(760): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(813): warning C4018: '<': signed/unsigned mismatch
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(868): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(900): warning C4305: 'initializing': truncation from 'double' to 'float'
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(1142): warning C4305: 'argument': truncation from 'int' to 'bool'
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(1181): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+e:\programming\opengl\cherno\opengl\lul\lul\src\applicationadvcg.cpp(1248): warning C4018: '<': signed/unsigned mismatch
   LUL.vcxproj -> E:\Programming\OpenGL\Cherno\OpenGL\LUL\Debug\LUL.exe

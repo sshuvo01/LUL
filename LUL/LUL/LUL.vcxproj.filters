@@ -15,9 +15,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="src\Application.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Renderer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -60,6 +57,48 @@
     <ClCompile Include="src\PointLight.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="src\Cubemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthMap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Box.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Plane.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DepthCubemap.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ScreenRect.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Framebuffer.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_demo.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_draw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_widgets.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_impl_glfw.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="vendor\imgui\imgui_impl_opengl3.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\ApplicationAdvCG.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\MyShader.shader" />
@@ -70,12 +109,63 @@
     <None Include="res\shaders\Box.shader" />
     <None Include="res\shaders\asd.vert" />
     <None Include="res\shaders\Outliner.vert" />
-    <None Include="res\shaders\test.vert" />
     <None Include="res\shaders\grass.vert" />
     <None Include="res\shaders\vert\Box.vert" />
     <None Include="res\shaders\frag\Box.frag" />
     <None Include="res\shaders\frag\Framebuffer.frag" />
     <None Include="res\shaders\vert\Framebuffer.vert" />
+    <None Include="res\shaders\frag\Skybox.frag" />
+    <None Include="res\shaders\vert\Skybox.vert" />
+    <None Include="res\shaders\geom\test.geom" />
+    <None Include="res\shaders\vert\test.vert" />
+    <None Include="res\shaders\frag\test.frag" />
+    <None Include="res\shaders\vert\Instancing.vert" />
+    <None Include="res\shaders\frag\Instancing.frag" />
+    <None Include="res\shaders\vert\planet.vert" />
+    <None Include="res\shaders\frag\planet.frag" />
+    <None Include="res\shaders\vert\rock.vert" />
+    <None Include="res\shaders\frag\rock.frag" />
+    <None Include="res\shaders\frag\nanosuit.frag" />
+    <None Include="res\shaders\vert\nanosuit.vert" />
+    <None Include="res\shaders\geom\nanosuit.geom" />
+    <None Include="res\shaders\vert\blinnphong.vert" />
+    <None Include="res\shaders\frag\blinnphong.frag" />
+    <None Include="res\shaders\vert\test2.vert" />
+    <None Include="res\shaders\frag\test2.frag" />
+    <None Include="res\shaders\vert\shadowmap.vert" />
+    <None Include="res\shaders\frag\shadowmap.frag" />
+    <None Include="res\shaders\vert\shadow.vert" />
+    <None Include="res\shaders\frag\shadow.frag" />
+    <None Include="res\shaders\vert\pointShadow.vert" />
+    <None Include="res\shaders\frag\pointShadow.frag" />
+    <None Include="res\shaders\vert\pointShadowDepth.vert" />
+    <None Include="res\shaders\frag\pointShadowDepth.frag" />
+    <None Include="res\shaders\geom\pointShadowDepth.geom" />
+    <None Include="src\3.2.1.point_shadows.vert" />
+    <None Include="src\3.2.1.point_shadows_depth.vert" />
+    <None Include="src\3.2.1.point_shadows_depth.frag" />
+    <None Include="src\3.2.1.point_shadows_depth.geom" />
+    <None Include="3.2.1.point_shadows.frag" />
+    <None Include="3.2.1.point_shadows.vert" />
+    <None Include="3.2.1.point_shadows_depth.frag" />
+    <None Include="3.2.1.point_shadows_depth.vert" />
+    <None Include="3.2.1.point_shadows_depth.geom" />
+    <None Include="res\shaders\vert\NormalMapping.vert" />
+    <None Include="res\shaders\frag\NormalMapping.frag" />
+    <None Include="res\shaders\vert\parallaxMapping.vert" />
+    <None Include="res\shaders\frag\parallaxMapping.frag" />
+    <None Include="res\shaders\vert\TunnelShader.vert" />
+    <None Include="res\shaders\frag\TunnelShader.frag" />
+    <None Include="res\shaders\vert\HDR.vert" />
+    <None Include="res\shaders\frag\HDR.frag" />
+    <None Include="res\shaders\vert\Blur.vert" />
+    <None Include="res\shaders\frag\Blur.frag" />
+    <None Include="res\shaders\vert\finalImage.vert" />
+    <None Include="res\shaders\frag\finalImage.frag" />
+    <None Include="res\shaders\vert\SourceJDV.vert" />
+    <None Include="res\shaders\frag\SourceJDV.frag" />
+    <None Include="res\shaders\frag\Cloth.frag" />
+    <None Include="res\shaders\vert\Cloth.vert" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="src\Renderer.h">
@@ -120,6 +210,54 @@
     <ClInclude Include="src\PointLight.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\Cubemap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DepthMap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Box.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Plane.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\DepthCubemap.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\shaderJDV.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\ScreenRect.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\Framebuffer.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imconfig.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui_internal.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_rectpack.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_textedit.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imstb_truetype.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui_impl_glfw.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\imgui\imgui_impl_opengl3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Image Include="res\textures\awesomeface.png">
@@ -144,6 +282,78 @@
       <Filter>Resource Files</Filter>
     </Image>
     <Image Include="res\textures\blending_transparent_window.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Cubemaps\skybox\back.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Cubemaps\skybox\bottom.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Cubemaps\skybox\front.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Cubemaps\skybox\left.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Cubemaps\skybox\right.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\Cubemaps\skybox\top.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\wood.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\brickwall.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\brickwall_normal.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\bricks2.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\bricks2_disp.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\bricks2_normal.jpg">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\toy_box_disp.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\toy_box_normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\castle_gate_diff.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\castle_gate_disp.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\castle_gate_normal.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\castle_gate_disp_2.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\fabric_pattern_07_ao_2k.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\fabric_pattern_07_col_1_2k.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\fabric_pattern_07_col_2_2k.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\fabric_pattern_07_col_03_2k.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\fabric_pattern_07_nor_2k.png">
+      <Filter>Resource Files</Filter>
+    </Image>
+    <Image Include="res\textures\fabric_pattern_07_rough_2k.png">
       <Filter>Resource Files</Filter>
     </Image>
   </ItemGroup>

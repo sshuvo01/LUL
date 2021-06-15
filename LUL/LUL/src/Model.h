@@ -11,7 +11,8 @@
 
 class Model
 {
-private:
+public:
+//private:
 	std::vector<Texture> m_Textures;
 	std::vector<Mesh> m_Meshes;
 	std::string m_Directory;
@@ -23,7 +24,7 @@ private:
 	Mesh ProcessMesh(aiMesh* mesh, const aiScene* scene);
 	std::vector<Texture> LoadMaterialTextures(aiMaterial* mat, 
 		aiTextureType type, const std::string& typeName);
-public:
+//public:
 	Model(const std::string& path, bool gamma = false);
 	void Draw(const Shader& shader, const Renderer& renderer) const;
 };

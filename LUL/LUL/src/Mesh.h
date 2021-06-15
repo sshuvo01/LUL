@@ -23,7 +23,8 @@ struct Vertex
 
 class Mesh
 {
-private:
+public:
+//private:
 	// Mesh data
 	std::vector<Vertex> m_Vertices;
 	std::vector<Texture> m_Textures;
@@ -35,7 +36,7 @@ private:
 
 	// private functions
 	void SetupMesh();
-public:
+//public:
 	Mesh(const std::vector<Vertex>& vertices, const std::vector<unsigned int>& indices,
 		const std::vector<Texture>& textures);
 	void Draw(const Shader& shader, const Renderer& renderer) const;

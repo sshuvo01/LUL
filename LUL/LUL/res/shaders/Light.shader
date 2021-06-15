@@ -13,15 +13,17 @@ void main()
 {
 	
 	gl_Position = u_Projection * u_View * u_Model * vec4(vertex, 1);
-};
+}
 
 
 #shader fragment
 #version 330 core
 
+uniform vec3 u_LightColor;
+
 out vec4 finalFragColor;
 
 void main()
 {
-	finalFragColor = vec4(1.0, 1.0, 1.0, 1.0);// *vec4(0.45, 0.6, 0.7, 1.0);
+	finalFragColor = vec4(u_LightColor, 1.0);// *vec4(0.45, 0.6, 0.7, 1.0);
 }

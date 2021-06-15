@@ -30,6 +30,41 @@ void VertexArray::AddBuffer(const VertexBuffer& vb, const VertexBufferLayout& vb
 	}
 }
 
+void VertexArray::AddInstanceBuffer(const VertexBuffer& vb, DataType type, unsigned int index,
+	unsigned int divisor)
+{
+	/*separate buffer for instance array*/
+	/*all floats*/
+	Bind();
+	vb.Bind();
+
+	int count = (int)type;
+	
+	if (count <= 4)
+	{
+		GLCALL(glEnableVertexAttribArray(index));
+		GLCALL(glVertexAttribPointer(index, count, GL_FLOAT, GL_FALSE, 
+			count * sizeof(float), (void*)0));
+		GLCALL(glVertexAttribDivisor(index, divisor));
+	}
+	else
+	{
+		/*for matrix*/
+		int vecSize;
+		int vecElementCount = (int)sqrt(count);
+		if (count == 16) vecSize = sizeof(glm::vec4);
+		else if (count == 9) vecSize = sizeof(glm::vec3);
+
+		for (int i = 0; i < vecElementCount; i++)
+		{
+			GLCALL(glEnableVertexAttribArray(index+i));
+			GLCALL(glVertexAttribPointer(index+i, vecElementCount, GL_FLOAT, GL_FALSE, 
+				vecElementCount * vecSize, (void*)(i*vecSize)));
+			GLCALL(glVertexAttribDivisor(index+i, divisor));
+		}
+	} // end of else
+}
+
 void VertexArray::Bind() const
 {
 	GLCALL(glBindVertexArray(m_RendererID));
